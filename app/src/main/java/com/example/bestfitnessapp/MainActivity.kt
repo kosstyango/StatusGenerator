@@ -2,7 +2,11 @@ package com.example.bestfitnessapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.bestfitnessapp.adapters.CategoryAdapter
+import com.example.bestfitnessapp.adapters.ContentManager
 import com.example.bestfitnessapp.databinding.ActivityMainBinding
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -10,6 +14,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bindingA : ActivityMainBinding
+    private var adapter : CategoryAdapter? = null
     private var interAd: InterstitialAd? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,12 +22,18 @@ class MainActivity : AppCompatActivity() {
         bindingA = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingA.root)
         (application as AppMainState).showAdIfAvailable(this){//запускаем рекламу ДО открытия основного окна
-            Toast.makeText(this, "Реклама закончилась :)", Toast.LENGTH_LONG).show() //это происходит, когда пользователь закрыл рекламу
+            //Toast.makeText(this, "Реклама закончилась :)", Toast.LENGTH_LONG).show() //это происходит, когда пользователь закрыл рекламу
         }
         initAdMod()
-        bindingA.Button.setOnClickListener{//при нажатии на кнопку
-            showInterAd() //запускаем меж-страничную рекламу
-        }
+        initRcView()
+    }
+    private fun initRcView() = with(bindingA) {
+        adapter = CategoryAdapter()
+        rcViewCat.layoutManager = LinearLayoutManager(this@MainActivity,
+            LinearLayoutManager.HORIZONTAL,
+            false)
+        rcViewCat.adapter = adapter
+        adapter?.submitList(ContentManager.list)
     }
 
     override fun onResume() {
@@ -88,6 +99,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showContent(){ //имитация запуска контента после просмотра рекламы
-        Toast.makeText(this, "Запуск контента", Toast.LENGTH_LONG).show()
+        //Toast.makeText(this, "Запуск контента", Toast.LENGTH_LONG).show()
     }
 }
