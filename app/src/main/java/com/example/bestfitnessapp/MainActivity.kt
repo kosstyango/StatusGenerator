@@ -2,20 +2,24 @@ package com.example.bestfitnessapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bestfitnessapp.adapters.CategoryAdapter
 import com.example.bestfitnessapp.adapters.ContentManager
+import com.example.bestfitnessapp.adapters.MainConst
 import com.example.bestfitnessapp.databinding.ActivityMainBinding
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bindingA : ActivityMainBinding
     private var adapter : CategoryAdapter? = null
     private var interAd: InterstitialAd? = null
+    private var timerA: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         }
         initAdMod()
         initRcView()
+        bindingA.imageBg.setOnClickListener(){
+            getResult()
+        }
     }
     private fun initRcView() = with(bindingA) {
         adapter = CategoryAdapter()
@@ -50,6 +57,23 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         bindingA.adView.destroy()
+    }
+
+    private fun getResult() {
+        var counter = (Math.random() * (12)).toInt()
+        timerA?.cancel()
+        timerA = object : CountDownTimer(5000, 200){
+            override fun onTick(p0: Long) {
+                counter++
+                if (counter>12) counter=0 // не более 13, т.к. картинок всего 13
+                bindingA.imageBg.setImageResource(MainConst.imageList[counter])
+            }
+
+            override fun onFinish() {
+
+            }
+
+        }.start()
     }
 
     private fun initAdMod(){
