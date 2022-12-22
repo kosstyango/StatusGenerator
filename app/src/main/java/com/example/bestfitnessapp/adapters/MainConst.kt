@@ -22,6 +22,7 @@ object MainConst {
         R.array.anger,
         R.array.admiration,
         R.array.delight,
-        R.array.alertness
+        R.array.alertness,
+        R.array.wonder
     )
 }
