@@ -18,4 +18,10 @@ object MainConst {
         R.drawable.tropicalretreat,
         R.drawable.windsurfer
     )
+    val emotionsList = listOf(
+        R.array.anger,
+        R.array.admiration,
+        R.array.delight,
+        R.array.alertness
+    )
 }

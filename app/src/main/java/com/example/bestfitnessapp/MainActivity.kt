@@ -3,23 +3,23 @@ package com.example.bestfitnessapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bestfitnessapp.adapters.CategoryAdapter
 import com.example.bestfitnessapp.adapters.ContentManager
 import com.example.bestfitnessapp.adapters.MainConst
+import com.example.bestfitnessapp.adapters.MainConst.imageList
 import com.example.bestfitnessapp.databinding.ActivityMainBinding
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import java.util.*
+import kotlin.random.Random
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CategoryAdapter.Listener {
     private lateinit var bindingA : ActivityMainBinding
     private var adapter : CategoryAdapter? = null
     private var interAd: InterstitialAd? = null
     private var timerA: CountDownTimer? = null
+    private var posM: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,17 +30,17 @@ class MainActivity : AppCompatActivity() {
         }
         initAdMod()
         initRcView()
-        bindingA.imageBg.setOnClickListener(){
-            getResult()
-        }
+//        bindingA.imageBg.setOnClickListener(){
+//            getResult()
+//        }
     }
     private fun initRcView() = with(bindingA) {
-        adapter = CategoryAdapter()
+        adapter = CategoryAdapter(this@MainActivity)
         rcViewCat.layoutManager = LinearLayoutManager(this@MainActivity,
             LinearLayoutManager.HORIZONTAL,
             false)
         rcViewCat.adapter = adapter
-        adapter?.submitList(ContentManager.list)
+        adapter?.submitList(ContentManager.emogyList)
     }
 
     override fun onResume() {
@@ -59,30 +59,32 @@ class MainActivity : AppCompatActivity() {
         bindingA.adView.destroy()
     }
 
-    private fun getResult() {
-        var counter = (Math.random() * (12)).toInt()
+    private fun getResult() = with(bindingA){ //перебор картинок
+        tvMessage.text = null //обнуляем верхний экран
+        tvMessage.setBackgroundColor(0x00000000) //никакой
+        tvName.text = null //обнуляем нижний экран
+        tvName.setBackgroundColor(0x00000000) //никакой
+
         timerA?.cancel()
         timerA = object : CountDownTimer(5000, 200){
             override fun onTick(p0: Long) {
-                counter++
-                if (counter>12) counter=0 // не более 13, т.к. картинок всего 13
-                bindingA.imageBg.setImageResource(MainConst.imageList[counter])
+                bindingA.imageBg.setImageResource(imageList[Random.nextInt(12)])
             }
 
             override fun onFinish() {
-
+                getMessage()
             }
 
         }.start()
     }
 
-    private fun initAdMod(){
+    private fun initAdMod(){ //запускаем баннерную рекламу
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         bindingA.adView.loadAd(adRequest)
     }
 
-    private fun loadInterAd(){
+    private fun loadInterAd(){ //загружаем межстраничную рекламу
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest,
             object : InterstitialAdLoadCallback(){
@@ -95,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 }
         })
     }
-    private fun showInterAd(){
+    private fun showInterAd(){ //показываем межстраничную рекламу
         if (interAd != null) {//если рекламный объект НЕ равен нулю
             interAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback(){
@@ -121,8 +123,22 @@ class MainActivity : AppCompatActivity() {
             showContent() //пускаем пользователя к пост-рекламному контенту
         }
     }
-
+    private fun getMessage() = with(bindingA){
+        val currentArray = resources.getStringArray(MainConst.emotionsList[posM]) //достаем из памяти массив строк под номером posM
+        val message = currentArray[Random.nextInt(currentArray.size)] //выбираем случайную строку из массива
+        val messageList = message.split("~") //делим строку на части по знаку "~"
+        tvMessage.text = messageList[0] //первую часть отправляем на верхний экран
+        tvMessage.setBackgroundColor(0x40808080.toInt()) //очень прозрачный серый
+        tvName.text = messageList[1] //вторую часть - на нижний экран
+        tvName.setBackgroundColor(0x60FF0000.toInt()) //сильно-прозрачный красный
+        imageBg.setImageResource((MainConst.imageList[Random.nextInt(12)])) //берём случайную картинку
+}
     private fun showContent(){ //имитация запуска контента после просмотра рекламы
         //Toast.makeText(this, "Запуск контента", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onClick(pos: Int) {
+        posM = pos
+        getResult()
     }
 }

@@ -12,14 +12,15 @@ import com.example.bestfitnessapp.R
 import com.example.bestfitnessapp.databinding.CategoryItemBinding
 
 
-class CategoryAdapter : ListAdapter<String, CategoryAdapter.Holder>(Comporator()) {
+class CategoryAdapter(var listener: Listener) : ListAdapter<String, CategoryAdapter.Holder>(Comporator()) {
 
     class Holder (view: View) : RecyclerView.ViewHolder(view){
-        val binding = CategoryItemBinding.bind(view)
-            fun setData(text:String) = with(binding){
+        private val binding = CategoryItemBinding.bind(view)
+            fun setData(text:String, listener: Listener) = with(binding){
                 tvCatTitle.text = text
                 cardViewCat.backgroundTintList =
                     ColorStateList.valueOf(Color.parseColor(ContentManager.colorList[adapterPosition]))
+                itemView.setOnClickListener{listener.onClick(adapterPosition)}
             }
     }
 
@@ -31,7 +32,6 @@ class CategoryAdapter : ListAdapter<String, CategoryAdapter.Holder>(Comporator()
         override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
             return oldItem == newItem
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -40,6 +40,9 @@ class CategoryAdapter : ListAdapter<String, CategoryAdapter.Holder>(Comporator()
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.setData(getItem(position))
+        holder.setData(getItem(position), listener)
+    }
+    interface Listener{
+        fun onClick (pos: Int)
     }
 }
