@@ -1,5 +1,6 @@
 package com.example.bestfitnessapp.adapters
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -16,9 +17,12 @@ class CategoryAdapter(var listener: Listener) : ListAdapter<String, CategoryAdap
 
     class Holder (view: View) : RecyclerView.ViewHolder(view){
         private val binding = CategoryItemBinding.bind(view)
+            @SuppressLint("ResourceAsColor")
             fun setData(text:String, listener: Listener) = with(binding){
                 tvCatTitle.text = text
-                cardViewCat.backgroundTintList =
+                //tvCatTitle.setTextColor(R.color.purple_200)//указываем цвет текста в кнопках
+                tvCatTitle.textSize = 24F//указываем размер текста в кнопках
+                cardViewCat.backgroundTintList =//указываем цвет кнопки в горизонтальном Recycler View
                     ColorStateList.valueOf(Color.parseColor(ContentManager.colorList[adapterPosition]))
                 itemView.setOnClickListener{listener.onClick(adapterPosition)}
             }

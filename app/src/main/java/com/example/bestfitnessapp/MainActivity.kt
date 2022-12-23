@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity(), CategoryAdapter.Listener, AnimationLis
         //Toast.makeText(this, "Запуск контента", Toast.LENGTH_LONG).show()
     }
 
-    override fun onClick(pos: Int) {
+    override fun onClick(pos: Int) { //обработчик нажатия кнопки по номеру @pos@
         bindingA.apply {
             tvMessage.startAnimation(outAnimation)
             tvName.startAnimation(outAnimation)
@@ -139,14 +139,11 @@ class MainActivity : AppCompatActivity(), CategoryAdapter.Listener, AnimationLis
         posM = pos
     }
 
-    override fun onAnimationStart(p0: Animation?) {
-
-    }
+    override fun onAnimationStart(p0: Animation?) {}
 
     override fun onAnimationEnd(p0: Animation?) {
         getMessage()
     }
 
-    override fun onAnimationRepeat(p0: Animation?) {
-    }
+    override fun onAnimationRepeat(p0: Animation?) {}
 }
