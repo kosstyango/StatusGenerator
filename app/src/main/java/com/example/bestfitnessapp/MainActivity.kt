@@ -3,6 +3,9 @@ package com.example.bestfitnessapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bestfitnessapp.adapters.CategoryAdapter
 import com.example.bestfitnessapp.adapters.ContentManager
@@ -14,22 +17,27 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import kotlin.random.Random
 
-class MainActivity : AppCompatActivity(), CategoryAdapter.Listener {
+class MainActivity : AppCompatActivity(), CategoryAdapter.Listener, AnimationListener {
     private lateinit var bindingA : ActivityMainBinding
     private var adapter : CategoryAdapter? = null
     private var interAd: InterstitialAd? = null
-    private var timerA: CountDownTimer? = null
     private var posM: Int = 0
+    private  lateinit var inAnimation : Animation
+    private  lateinit var outAnimation : Animation
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingA = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingA.root)
+        inAnimation = AnimationUtils.loadAnimation(this, R.anim.alpha_in)
+        outAnimation = AnimationUtils.loadAnimation(this, R.anim.alpha_out)
+        outAnimation.setAnimationListener(this)
         (application as AppMainState).showAdIfAvailable(this){//запускаем рекламу ДО открытия основного окна
             //Toast.makeText(this, "Реклама закончилась :)", Toast.LENGTH_LONG).show() //это происходит, когда пользователь закрыл рекламу
         }
-        initAdMod()
-        initRcView()
+        initAdMod() //запускаем баннерную рекламу
+        initRcView() //надуваем RecyclerView
 //        bindingA.imageBg.setOnClickListener(){
 //            getResult()
 //        }
@@ -57,25 +65,6 @@ class MainActivity : AppCompatActivity(), CategoryAdapter.Listener {
     override fun onDestroy() {
         super.onDestroy()
         bindingA.adView.destroy()
-    }
-
-    private fun getResult() = with(bindingA){ //перебор картинок
-        tvMessage.text = null //обнуляем верхний экран
-        tvMessage.setBackgroundColor(0x00000000) //никакой
-        tvName.text = null //обнуляем нижний экран
-        tvName.setBackgroundColor(0x00000000) //никакой
-
-        timerA?.cancel()
-        timerA = object : CountDownTimer(5000, 200){
-            override fun onTick(p0: Long) {
-                bindingA.imageBg.setImageResource(imageList[Random.nextInt(12)])
-            }
-
-            override fun onFinish() {
-                getMessage()
-            }
-
-        }.start()
     }
 
     private fun initAdMod(){ //запускаем баннерную рекламу
@@ -124,6 +113,10 @@ class MainActivity : AppCompatActivity(), CategoryAdapter.Listener {
         }
     }
     private fun getMessage() = with(bindingA){
+        tvMessage.startAnimation(inAnimation)
+        tvName.startAnimation(inAnimation)
+        imageBg.startAnimation(inAnimation)
+        initAdMod()//перезагружаем баннерную рекламу
         val currentArray = resources.getStringArray(MainConst.emotionsList[posM]) //достаем из памяти массив строк под номером posM
         val message = currentArray[Random.nextInt(currentArray.size)] //выбираем случайную строку из массива
         val messageList = message.split("~") //делим строку на части по знаку "~"
@@ -138,7 +131,22 @@ class MainActivity : AppCompatActivity(), CategoryAdapter.Listener {
     }
 
     override fun onClick(pos: Int) {
+        bindingA.apply {
+            tvMessage.startAnimation(outAnimation)
+            tvName.startAnimation(outAnimation)
+            imageBg.startAnimation(outAnimation)
+        }
         posM = pos
-        getResult()
+    }
+
+    override fun onAnimationStart(p0: Animation?) {
+
+    }
+
+    override fun onAnimationEnd(p0: Animation?) {
+        getMessage()
+    }
+
+    override fun onAnimationRepeat(p0: Animation?) {
     }
 }
