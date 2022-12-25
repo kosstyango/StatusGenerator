@@ -26,7 +26,6 @@ object MainConst {
         R.drawable.picture9,
         R.drawable.picture20,
         R.drawable.picture21,
-        R.drawable.picture22,
         R.drawable.picture1,
         R.drawable.picture10,
         R.drawable.picture11,
