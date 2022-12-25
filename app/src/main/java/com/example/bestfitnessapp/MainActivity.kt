@@ -121,10 +121,10 @@ class MainActivity : AppCompatActivity(), CategoryAdapter.Listener, AnimationLis
         val message = currentArray[Random.nextInt(currentArray.size)] //выбираем случайную строку из массива
         val messageList = message.split("~") //делим строку на части по знаку "~"
         tvMessage.text = messageList[0] //первую часть отправляем на верхний экран
-        tvMessage.setBackgroundColor(0x40808080.toInt()) //очень прозрачный серый
+        tvMessage.setBackgroundColor(0x44808080.toInt()) //очень-прозрачный серый
         tvName.text = messageList[1] //вторую часть - на нижний экран
         tvName.setBackgroundColor(0x60FF0000.toInt()) //сильно-прозрачный красный
-        imageBg.setImageResource((MainConst.imageList[Random.nextInt(12)])) //берём случайную картинку
+        imageBg.setImageResource((imageList[Random.nextInt(imageList.size)])) //берём случайную картинку из массива imageList
 }
     private fun showContent(){ //имитация запуска контента после просмотра рекламы
         //Toast.makeText(this, "Запуск контента", Toast.LENGTH_LONG).show()
