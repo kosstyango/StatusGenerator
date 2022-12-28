@@ -1,13 +1,13 @@
 package com.example.bestfitnessapp.adapters
-object ContentManager { //эмоции
+object ContentManager { //
     val emogyList = arrayListOf(
-        "Злость",
+        "Юмор",
+        "Мотиватор",
         "Восхищение",
         "Радость",
         "Удивление",
         "Недовольство",
-        "Тревога",
-        "Грусть")
+        "Тревога")
     val colorList = arrayListOf( //цвета
         "#FF0000", //красный
         "#FF7F00", //оранжевый

@@ -40,7 +40,7 @@ object MainConst {
         R.drawable.windsurfer
     )
     val emotionsList = listOf(
-        R.array.anger,      //Злость
+        R.array.winged,      //Юмор
         R.array.admiration, //Восхищение
         R.array.delight,    //Радость
         R.array.wonder,     //Удивление
