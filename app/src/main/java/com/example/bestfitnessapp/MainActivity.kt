@@ -2,7 +2,6 @@ package com.example.bestfitnessapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity(), CategoryAdapter.Listener, AnimationLis
             LinearLayoutManager.HORIZONTAL,
             false)
         rcViewCat.adapter = adapter
-        adapter?.submitList(ContentManager.emogyList)
+        adapter?.submitList(ContentManager.buttonList)
     }
 
     override fun onResume() {

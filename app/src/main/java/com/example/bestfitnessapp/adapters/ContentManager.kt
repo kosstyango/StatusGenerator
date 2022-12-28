@@ -1,9 +1,9 @@
 package com.example.bestfitnessapp.adapters
 object ContentManager { //
-    val emogyList = arrayListOf(
+    val buttonList = arrayListOf(
         "Юмор",
         "Мотиватор",
-        "Восхищение",
+        "Мудрость",
         "Радость",
         "Удивление",
         "Недовольство",

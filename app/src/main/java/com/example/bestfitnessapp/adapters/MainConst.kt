@@ -41,8 +41,8 @@ object MainConst {
     )
     val emotionsList = listOf(
         R.array.winged,      //Юмор
-        R.array.admiration, //Восхищение
-        R.array.delight,    //Радость
+        R.array.motivator, //Мотиватор
+        R.array.wisdom,    //Мудрость
         R.array.wonder,     //Удивление
         R.array.discontent, //Недовольство
         R.array.anxiety,    //Тревога
