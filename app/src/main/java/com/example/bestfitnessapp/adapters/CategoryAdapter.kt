@@ -20,8 +20,8 @@ class CategoryAdapter(var listener: Listener) : ListAdapter<String, CategoryAdap
             @SuppressLint("ResourceAsColor")
             fun setData(text:String, listener: Listener) = with(binding){
                 tvCatTitle.text = text
-                tvCatTitle.setTextColor(R.color.purple_200)//указываем цвет текста в кнопках
-                tvCatTitle.textSize = 24F//указываем размер текста в кнопках
+                //tvCatTitle.setTextColor(R.color.purple_200)//указываем цвет текста в кнопках
+                //tvCatTitle.textSize = 24F//указываем размер текста в кнопках
                 cardViewCat.backgroundTintList =//указываем цвет кнопки в горизонтальном Recycler View
                     ColorStateList.valueOf(Color.parseColor(ContentManager.colorList[adapterPosition]))
                 itemView.setOnClickListener{listener.onClick(adapterPosition)}
